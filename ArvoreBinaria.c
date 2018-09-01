@@ -7,7 +7,7 @@ typedef struct ArvBin {
     struct ArvBin *dir;
 } NO;
 
-// Uma funÁ„o para criar um novo nÛ na ¡rvore de Busca Bin·ria
+// Uma fun√ß√£o para criar um novo n√≥ na √Årvore de Busca Bin√°ria
 NO *novoNo(int item) {
     NO *temp =  (NO *)malloc(sizeof(NO));
     temp->info = item;
@@ -15,7 +15,7 @@ NO *novoNo(int item) {
     return temp;
 }
 
-// Guilherme Cardozo | 01/09/2018 - funÁ„o para imprimir a ·rvore em prÈ ordem (RAIZ, ESQ, DIR)
+// Guilherme Cardozo | 01/09/2018 - fun√ß√£o para imprimir a √°rvore em pr√© ordem (RAIZ, ESQ, DIR)
 void preOrdem(NO *raiz) {
     if(raiz != NULL) {
         printf("%d ", raiz->info);
@@ -24,7 +24,7 @@ void preOrdem(NO *raiz) {
     }
 }
 
-// Uma funÁ„o para fazer o percurso EmOrdem na ¡rvore de Busca Bin·ria
+// Uma fun√ß√£o para fazer o percurso EmOrdem na √Årvore de Busca Bin√°ria
 void emordem(NO *raiz) {
     if(raiz != NULL) {
         emordem(raiz->esq);
@@ -33,7 +33,7 @@ void emordem(NO *raiz) {
     }
 }
 
-// Guilherme Cardozo | 01/09/2018 - funÁ„o para imprimir a ·rvore em pÛs ordem (ESQ, DIR, RAIZ)
+// Guilherme Cardozo | 01/09/2018 - fun√ß√£o para imprimir a √°rvore em p√≥s ordem (ESQ, DIR, RAIZ)
 void posOrdem(NO *raiz) {
     if(raiz != NULL) {
         posOrdem(raiz->esq);
@@ -42,26 +42,26 @@ void posOrdem(NO *raiz) {
     }
 }
 
-// Uma funÁ„o para inserir um novo nÛ com uma dada chave (info) na ¡rvore de Busca Bin·ria
+// Uma fun√ß√£o para inserir um novo n√≥ com uma dada chave (info) na √Årvore de Busca Bin√°ria
 NO *insere(NO *no, int info) {
-    // Se a ·rvore estiver vazia, retorne um novo nÛ
+    // Se a √°rvore estiver vazia, retorne um novo n√≥
     if (no == NULL)
         return novoNo(info);
 
-    // Caso contr·rio, volte pela ·rvore
+    // Caso contr√°rio, volte pela √°rvore
     if (info < no->info)
         no->esq  = insere(no->esq, info);
     else if (info > no->info)
         no->dir = insere(no->dir, info);
 
-    // retorna o ponteiro do nÛ (inalterado)
+    // retorna o ponteiro do n√≥ (inalterado)
     return no;
 }
 
-// Teste das funÁıes
+// Teste das fun√ß√µes
 int main()
 {
-    /* Criar a seguinte ¡rvore de Busca Bin·ria
+    /* Criar a seguinte √Årvore de Busca Bin√°ria
               50
            /     \
           30      70
@@ -77,18 +77,49 @@ int main()
     insere(raiz, 60);
     insere(raiz, 80);
 
-    printf("\n¡rvore de Busca Bin·ria: InserÁ„o e Percurso;\n\n");
-    printf("\nValores inseridos: 50, 30, 20, 40, 70, 60 e 80.\n\n");
+    // Guilherme Cardozo | 01/09/2018 - Cria√ß√£o do menu
+    int opcao, info;
+    system("clear");
+    printf("\nValores inseridos: 50, 30, 20, 40, 70, 60 e 80.");
+    do {
+        printf("\n\n------------------ ARVORE DE BUSCA BINARIA ------------------\n\n");
+        printf("[1] Excluir elemento da arvore.\n");
+        printf("[2] Imprimir arvore em pr√© ordem.\n");
+        printf("[3] Imprimir arvore em ordem.\n");
+        printf("[4] Imprimir arvore em p√≥s ordem.\n");
+        printf("[0] Sair.\n");
+        printf("Digite a op√ß√£o desejada: \n");
 
-    // Imprimir o percurso EmOrdem da ¡rvore de Busca Bin·ria
-    printf("\nPercurso Em Ordem: ");
-    emordem(raiz);
-
-    printf("\nPercurso em prÈ ordem: ");
-    preOrdem(raiz);
-
-    printf("\nPercurso em pÛs-ordem: ");
-    posOrdem(raiz);
+        scanf("%d", &opcao);
+        switch(opcao) {
+            case 1:
+                system("clear");
+                printf("Digite o valor que voc√™ quer eliminar da arvore: \n");
+                scanf("%d", &info);
+                system("clear");
+                break;
+            case 2:
+                system("clear");
+                printf("\nPercurso em pr√© ordem: ");
+                preOrdem(raiz);
+                break;
+            case 3:
+                system("clear");
+                printf("\nPercurso em ordem: ");
+                emordem(raiz);
+                break;
+            case 4:
+                system("clear");
+                printf("\nPercurso em p√≥s-ordem: ");
+                posOrdem(raiz);
+                break;
+            case 0:
+                system("clear");
+                break;
+            default:
+                system("clear");
+                printf("\nOpera√ß√£o inv√°lida, verifique se o n√∫mero que voc√™ digitou est√° no menu.\n");
+        }
+    } while(opcao != 0);
     return 0;
-
 }
