@@ -1,53 +1,67 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-typedef struct ArvBin
-{
+typedef struct ArvBin {
     int info;
     struct ArvBin *esq;
     struct ArvBin *dir;
 } NO;
 
-// Uma fun√ß√£o para criar um novo n√≥ na √Årvore de Busca Bin√°ria 
-NO *novoNo(int item)
-{
+// Uma funÁ„o para criar um novo nÛ na ¡rvore de Busca Bin·ria
+NO *novoNo(int item) {
     NO *temp =  (NO *)malloc(sizeof(NO));
     temp->info = item;
     temp->esq = temp->dir = NULL;
     return temp;
 }
 
-// Uma fun√ß√£o para fazer o percurso EmOrdem na √Årvore de Busca Bin√°ria
-void emordem(NO *raiz)
-{
-    if (raiz != NULL)
-    {
+// Guilherme Cardozo | 01/09/2018 - funÁ„o para imprimir a ·rvore em prÈ ordem (RAIZ, ESQ, DIR)
+void preOrdem(NO *raiz) {
+    if(raiz != NULL) {
+        printf("%d ", raiz->info);
+        preOrdem(raiz->esq);
+        preOrdem(raiz->dir);
+    }
+}
+
+// Uma funÁ„o para fazer o percurso EmOrdem na ¡rvore de Busca Bin·ria
+void emordem(NO *raiz) {
+    if(raiz != NULL) {
         emordem(raiz->esq);
         printf("%d ", raiz->info);
         emordem(raiz->dir);
     }
 }
 
-// Uma fun√ß√£o para inserir um novo n√≥ com uma dada chave (info) na √Årvore de Busca Bin√°ria
-NO *insere(NO *no, int info)
-{
-    // Se a √°rvore estiver vazia, retorne um novo n√≥
-    if (no == NULL) return novoNo(info);
+// Guilherme Cardozo | 01/09/2018 - funÁ„o para imprimir a ·rvore em pÛs ordem (ESQ, DIR, RAIZ)
+void posOrdem(NO *raiz) {
+    if(raiz != NULL) {
+        posOrdem(raiz->esq);
+        posOrdem(raiz->dir);
+        printf("%d ", raiz->info);
+    }
+}
 
-    // Caso contr√°rio, volte pela √°rvore 
+// Uma funÁ„o para inserir um novo nÛ com uma dada chave (info) na ¡rvore de Busca Bin·ria
+NO *insere(NO *no, int info) {
+    // Se a ·rvore estiver vazia, retorne um novo nÛ
+    if (no == NULL)
+        return novoNo(info);
+
+    // Caso contr·rio, volte pela ·rvore
     if (info < no->info)
         no->esq  = insere(no->esq, info);
     else if (info > no->info)
         no->dir = insere(no->dir, info);
 
-    // retorna o ponteiro do n√≥ (inalterado)
+    // retorna o ponteiro do nÛ (inalterado)
     return no;
 }
 
-// Teste das fun√ß√µes
+// Teste das funÁıes
 int main()
 {
-    /* Criar a seguinte √Årvore de Busca Bin√°ria
+    /* Criar a seguinte ¡rvore de Busca Bin·ria
               50
            /     \
           30      70
@@ -63,13 +77,18 @@ int main()
     insere(raiz, 60);
     insere(raiz, 80);
 
-    printf("\n√Årvore de Busca Bin√°ria: Inser√ß√£o e Percurso;\n\n");
+    printf("\n¡rvore de Busca Bin·ria: InserÁ„o e Percurso;\n\n");
     printf("\nValores inseridos: 50, 30, 20, 40, 70, 60 e 80.\n\n");
 
-    // Imprimir o percurso EmOrdem da √Årvore de Busca Bin√°ria
+    // Imprimir o percurso EmOrdem da ¡rvore de Busca Bin·ria
     printf("\nPercurso Em Ordem: ");
     emordem(raiz);
 
+    printf("\nPercurso em prÈ ordem: ");
+    preOrdem(raiz);
+
+    printf("\nPercurso em pÛs-ordem: ");
+    posOrdem(raiz);
     return 0;
 
 }
