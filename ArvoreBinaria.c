@@ -1,11 +1,24 @@
-#include<stdio.h>
-#include<stdlib.h>
+/*
+   Guilherme Cardozo da Silva
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdio_ext.h>
 
 typedef struct ArvBin {
     int info;
     struct ArvBin *esq;
     struct ArvBin *dir;
 } NO;
+
+/* declaração das funções utilizadas no código */
+int arvoreEhVazia(NO *raiz) ;
+void preOrdem(NO *raiz);
+void emordem(NO *raiz);
+void posOrdem(NO *raiz);
+NO *insere(NO *no, int info);
+int buscaElemento(NO *raiz, int info);
 
 // Uma função para criar um novo nó na Árvore de Busca Binária
 NO *novoNo(int item) {
@@ -15,7 +28,14 @@ NO *novoNo(int item) {
     return temp;
 }
 
-// Guilherme Cardozo | 01/09/2018 - função para imprimir a árvore em pré ordem (RAIZ, ESQ, DIR)
+/* função que verifica se a árvore está vazia*/
+int arvoreEhVazia(NO *raiz) {
+    // retina 1 se árvore for vazia e o 0 caso não seja vazia
+    return raiz == NULL;
+}
+
+
+/* função para imprimir a árvore em pré ordem (RAIZ, ESQ, DIR) */
 void preOrdem(NO *raiz) {
     if(raiz != NULL) {
         printf("%d ", raiz->info);
@@ -33,7 +53,7 @@ void emordem(NO *raiz) {
     }
 }
 
-// Guilherme Cardozo | 01/09/2018 - função para imprimir a árvore em pós ordem (ESQ, DIR, RAIZ)
+/* função para imprimir a árvore em pós ordem (ESQ, DIR, RAIZ) */
 void posOrdem(NO *raiz) {
     if(raiz != NULL) {
         posOrdem(raiz->esq);
@@ -58,6 +78,65 @@ NO *insere(NO *no, int info) {
     return no;
 }
 
+/* funçaõ responsável por tratar os 3 casos de remoção */
+NO* remove_atual(NO* atual) {
+    NO *no1, *no2;
+    /* se não tem filho na esquerda, aponta para o filho da direita.
+	   Trata o nó folha e o nó com 1 filho.*/
+    if(atual->esq == NULL){
+        no2 = atual->dir;
+        free(atual);
+        return no2;
+    }
+    /* procura o filho mais a direita na sub=árvore da esquerda */
+    no1 = atual;
+    no2 = atual->esq;
+    while(no2->dir != NULL){
+        no1 = no2;
+        no2 = no2->dir;
+    }
+    // no2 é o nó anterior (a esquerda) da raiz 
+    // no1 é o pai de no2
+    /* copia o filho mais a direita na sub-árvore esquerda para o lugar
+       do nó removido */
+    if(no1 != atual){
+        no1->dir = no2->esq;
+        no2->esq = atual->esq;
+    }
+    no2->dir = atual->dir;
+    free(atual);
+    return no2;
+}
+
+/* função responsavél por remover um nó da árvore */
+int remove_ArvBin(NO *raiz, int valor){
+    if(raiz == NULL)
+        return 0;
+    NO* ant = NULL;
+    NO* atual = raiz;
+    while(atual != NULL){
+        // Achou o nó a ser removido e verifica de qual lado irá remover
+        if(valor == atual->info){
+            if(atual == raiz)
+                raiz = remove_atual(atual);
+            else{
+                if(ant->dir == atual)
+                    ant->dir = remove_atual(atual);
+                else
+                    ant->esq = remove_atual(atual);
+            }
+            return 1;
+        }
+        //  busca o nó a ser removido
+        ant = atual;
+        if(valor > atual->info)
+            atual = atual->dir;
+        else
+            atual = atual->esq;
+    }
+    return 0;
+}
+
 // Teste das funções
 int main()
 {
@@ -78,7 +157,7 @@ int main()
     insere(raiz, 80);
 
     // Guilherme Cardozo | 01/09/2018 - Criação do menu
-    int opcao, info;
+    int opcao, info, achou;
     system("clear");
     printf("\nValores inseridos: 50, 30, 20, 40, 70, 60 e 80.");
     do {
@@ -90,13 +169,18 @@ int main()
         printf("[0] Sair.\n");
         printf("Digite a opção desejada: \n");
 
+
         scanf("%d", &opcao);
         switch(opcao) {
             case 1:
                 system("clear");
                 printf("Digite o valor que você quer eliminar da arvore: \n");
                 scanf("%d", &info);
-                system("clear");
+                if(remove_ArvBin(raiz, info) == 1)
+					printf("Elemento %d removido com sucesso!", info);
+				else
+					printf("Não existe esse elemento na árvore.");
+                //system("clear");
                 break;
             case 2:
                 system("clear");
